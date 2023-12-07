@@ -5,7 +5,29 @@
 
 using namespace std;
 
-unsigned long get_mem_total() {
+unsigned long getMemTotal();
+double findN(double, double, double, double);
+
+int main(){
+    unsigned long memTotalKiB = getMemTotal();
+    unsigned long memTotalB = memTotalKiB * 1024;
+    double memTotalMB = memTotalB / (1024.0 * 1024.0);
+    double NBValues[] = {128, 256, 384, 512, 640, 768, 896, 1024};
+
+    cout << "Memory size: " << memTotalMB << " MB" << endl << endl;
+
+	for(auto NBValue: NBValues){
+		cout << "NB: " << NBValue << endl;
+		for(double i = 0.90; i <= 1; i+=0.01){
+			cout << findN(memTotalMB, 1, i, NBValue) << " ";
+		}
+		cout << endl << endl;
+	}
+
+    return 0;
+}
+
+unsigned long getMemTotal(){
     string token;
     ifstream file("/proc/meminfo");
 
@@ -25,31 +47,11 @@ unsigned long get_mem_total() {
     return 0;
 }
 
-double findN(double mem, double nodes, double perc, double NB_value){
-	double totalmemory = mem * nodes;
-    totalmemory = trunc(totalmemory * pow(2, 20));
-    double toplimit = perc * trunc(sqrt(totalmemory / 8));
-    double quotient = trunc(toplimit / NB_value);
+double findN(double mem, double nodes, double perc, double NBValue){
+	double totalMemory = mem * nodes;
+    totalMemory = trunc(totalMemory * pow(2, 20));
+    double topLimit = perc * trunc(sqrt(totalMemory / 8));
+    double quoTient = trunc(topLimit / NBValue);
 
-	return quotient * NB_value;
-}
-
-int main() {
-    unsigned long mem_total_kib = get_mem_total();
-    unsigned long mem_total_bytes = mem_total_kib * 1024;
-    double mem_total_megabytes = mem_total_bytes / (1024.0 * 1024.0);
-    double NB[] = {128, 256, 384, 512, 640, 768, 896, 1024};
-
-    cout << "Memory size: " << mem_total_megabytes << " MB" << endl;
-    cout << endl;
-
-	for(auto NB_value: NB){
-		cout << "NB: " << NB_value << endl;
-		for(double i = 0.90; i <= 1; i+=0.01){
-			cout << findN(mem_total_megabytes, 1, i, NB_value) << " ";
-		}
-		cout << endl << endl;
-	}
-
-    return 0;
+	return quoTient * NBValue;
 }
