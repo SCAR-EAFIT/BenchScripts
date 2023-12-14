@@ -9,13 +9,13 @@ unsigned long getMemTotal();
 double findN(double, double, double, double);
 
 /*
-    @param argc (Number of parameters and meaning): 1 -> N° of nodes; 2 -> N° of nodes, memory size (GB)
-    @param argv (Possible values for each parameter): N° of nodes -> 1 (Default value), 2, 3, ..., n; Memory size (GB) -> 4, 8, 16, 32, 64, ..., N
+    @param argc (Number of parameters and meaning): 1 -> N° of nodes; 2 -> N° of nodes, memory size (MB)
+    @param argv (Possible values for each parameter): N° of nodes -> 1, 2, 3, ..., n; Memory size (MB) -> 4, 8, 16, 32, 64, ..., N
 */
 int main(int argc, char **argv){
     double memTotalMB;
     double NBValues[] = {128, 256, 384, 512, 640, 768, 896, 1024};
-    double nodeNumber = (argc > 1) ? atof(argv[1]) : 1;
+    double nodeNumber = atof(argv[1]);
 
     if(argc == 2){
         unsigned long memTotalKiB = getMemTotal();
@@ -23,7 +23,7 @@ int main(int argc, char **argv){
         memTotalMB = memTotalB / (1024.0 * 1024.0);
     }
     else{
-        memTotalMB = atof(argv[2]) * 1000;
+        memTotalMB = atof(argv[2]);
     }
 
     cout << "Memory size: " << memTotalMB << " MB" << endl << endl;
